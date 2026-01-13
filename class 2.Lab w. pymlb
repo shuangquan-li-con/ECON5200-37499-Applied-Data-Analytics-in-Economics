@@ -1,0 +1,196 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOKS8G9ZHZShjYiDDpDA7kN",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/shuangquan-li-con/ECON5200-37499-Applied-Data-Analytics-in-Economics/blob/main/class%202.Lab%20w.%20pymlb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "tzc315ZpeQKN",
+        "outputId": "00468368-42c9-4bd5-e4c3-e63d3c9f459f"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "          Country iso_a3  local_price  dollar_ex\n",
+            "0   United States    USA         4.79       1.00\n",
+            "1       Argentina    ARG        28.00       8.62\n",
+            "2       Australia    AUS         5.30       1.23\n",
+            "3          Brazil    BRA        13.50       2.59\n",
+            "4         Britain    GBR         2.89       0.66\n",
+            "5           China    CHN        17.20       6.21\n",
+            "6           Egypt    EGY        16.93       7.36\n",
+            "7       Euro area    EUZ         3.68       0.86\n",
+            "8       Hong Kong    HKG        18.80       7.74\n",
+            "9       Indonesia    IDN     27939.00   12472.00\n",
+            "10          Japan    JPN       370.00     117.83\n",
+            "11         Mexico    MEX        49.00      14.63\n",
+            "12         Norway    NOR        48.00       7.62\n",
+            "13       Pakistan    PAK       300.00     100.67\n",
+            "14    Philippines    PHL       163.00      44.41\n",
+            "15         Russia    RUS        89.00      65.44\n",
+            "16   Saudi Arabia    SAU        11.00       3.75\n",
+            "17   South Africa    ZAF        25.50      11.49\n",
+            "18    South Korea    KOR      4100.00    1084.66\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "data = {\n",
+        "    'Country': ['United States','Argentina','Australia','Brazil','Britain','China','Egypt','Euro area','Hong Kong','Indonesia','Japan','Mexico','Norway','Pakistan','Philippines','Russia','Saudi Arabia','South Africa','South Korea'],\n",
+        "    'iso_a3': ['USA','ARG','AUS','BRA','GBR','CHN','EGY','EUZ','HKG','IDN','JPN','MEX','NOR','PAK','PHL','RUS','SAU','ZAF','KOR'],\n",
+        "    'local_price': [4.79,28.00,5.30,13.50,2.89,17.20,16.93,3.68,18.80,27939,370,49.00,48.00,300,163,89.00,11.00,25.50,4100],\n",
+        "    'dollar_ex': [1.00,8.62,1.23,2.59,0.66,6.21,7.36,0.86,7.74,12472,117.83,14.63,7.62,100.67,44.41,65.44,3.75,11.49,1084.66]\n",
+        "   }\n",
+        "df=pd.DataFrame(data)\n",
+        "print(df)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install fredapi"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SZWdKYWH3FDg",
+        "outputId": "bd253d9b-9845-4b3d-e27e-be3908b796ab"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting fredapi\n",
+            "  Downloading fredapi-0.5.2-py3-none-any.whl.metadata (5.0 kB)\n",
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.12/dist-packages (from fredapi) (2.2.2)\n",
+            "Requirement already satisfied: numpy>=1.26.0 in /usr/local/lib/python3.12/dist-packages (from pandas->fredapi) (2.0.2)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.12/dist-packages (from pandas->fredapi) (2.9.0.post0)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.12/dist-packages (from pandas->fredapi) (2025.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.12/dist-packages (from pandas->fredapi) (2025.3)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.12/dist-packages (from python-dateutil>=2.8.2->pandas->fredapi) (1.17.0)\n",
+            "Downloading fredapi-0.5.2-py3-none-any.whl (11 kB)\n",
+            "Installing collected packages: fredapi\n",
+            "Successfully installed fredapi-0.5.2\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "from fredapi import Fred"
+      ],
+      "metadata": {
+        "id": "soPttWV28dVZ"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "fred=Fred(api_key='c3b49229ae543b42f8b6ba5671ac5aa6 ')"
+      ],
+      "metadata": {
+        "id": "L9_freGy83lV"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "fred"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "XoLizwey8_qh",
+        "outputId": "9604410e-f0ab-4514-f0b3-5493178fe456"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<fredapi.fred.Fred at 0x7de316dfc740>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 11
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "wage=fred.get_series('AHETPI')"
+      ],
+      "metadata": {
+        "id": "GeMqoub59A1f"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "cpi=fred.get_series('CPIAUCSL')"
+      ],
+      "metadata": {
+        "id": "5o3i1Vm-9YYX"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df="
+      ],
+      "metadata": {
+        "id": "IpzdK9cw9xbK"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
